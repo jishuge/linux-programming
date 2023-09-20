@@ -1,0 +1,3 @@
+/home/jishuge/CLionProjects/www/cmake-build-debug/CMakeFiles/www.dir
+/home/jishuge/CLionProjects/www/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/jishuge/CLionProjects/www/cmake-build-debug/CMakeFiles/rebuild_cache.dir
