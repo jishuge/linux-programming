@@ -3,4 +3,4 @@ project(www C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(www TcpServiceFork.c)
+add_executable(www TcpServiceThread.c)

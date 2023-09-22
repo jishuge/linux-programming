@@ -6,7 +6,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <pthread.h>
 
+typedef struct socketPthreadInfo {
+    int act;
+    struct sockaddr_in cliaddr;
+} CFINFO;
+
+void *threadFunction(void *args);
 
 int main() {
 
@@ -35,43 +42,48 @@ int main() {
 
     while (1) {
 
+        pthread_t pid;
+
         int acceptFd = accept(link_socket, (struct sockaddr *) &cliaddr, &client_address_length);
         if (acceptFd == -1) {
             perror("Accept error");
             break;
         }
 
-        int pid = fork();
-        if (pid == -1) {
-            perror("fork error");
-            break;
-        } else if (pid == 0) {
-            char ip[16];
-            memset(ip, 0, 16);
+        CFINFO cfinfo;
+        cfinfo.act = acceptFd;
+        cfinfo.cliaddr = cliaddr;
+        pthread_create(&pid, NULL, threadFunction, (void *) &cfinfo);
 
-            inet_ntop(AF_INET, &cliaddr.sin_addr, ip, sizeof(ip));
-
-            printf("client %s:%d connect\n", ip, ntohs(cliaddr.sin_port));
-            while (1) {
-                close(link_socket);
-                socklen_t n = read(acceptFd, buff, sizeof(buff) - 1);
-                if (n == 0) {
-                    printf("client %s:%d close\n", ip, ntohs(cliaddr.sin_port));
-                    close(acceptFd);
-                    exit(-1);
-                }
-                if (buff[n - 1] == '\n') {
-                    buff[n - 1] = '\0';
-                }
-                printf("[%s:%d] %s\n", ip, ntohs(cliaddr.sin_port), buff);
-            }
-        } else {
-            close(acceptFd);
-//            struct sigaction act;
-//            sigaction(SIGCHLD,);
-        }
     }
 
-
     return 0;
+}
+
+
+void *threadFunction(void *args) {
+    CFINFO *cfinfo = (CFINFO *) args;
+    int accepfd = cfinfo->act;
+    struct sockaddr_in cliaddr = cfinfo->cliaddr;
+
+
+    char ip[16];
+    size_t port;
+    inet_ntop(AF_INET, &cliaddr.sin_addr, ip, sizeof(ip));
+    port = ntohs(cliaddr.sin_port);
+
+
+
+    char buff[1024];
+    memset(buff, 0, 1024);
+    while (1) {
+        unsigned int n = read(accepfd, buff, 1023);
+        if (n == 0) {
+            close(accepfd);
+            printf("[%s:%zu]client close .....\n",ip,port);
+            break;
+        }
+        write(STDOUT_FILENO, buff, n);
+    }
+    return NULL;
 }
