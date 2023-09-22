@@ -50,9 +50,16 @@ int main() {
             break;
         }
 
+        /**
+         * 还有种处理方法，定义一个全局的CFINFO cfinfo，然后使用malloc申请空间，在threadFunction销毁掉。
+         */
         CFINFO cfinfo;
         cfinfo.act = acceptFd;
         cfinfo.cliaddr = cliaddr;
+
+        /**
+         * 创建多线程来处理监听到的连接客户端。
+         */
         pthread_create(&pid, NULL, threadFunction, (void *) &cfinfo);
 
     }
