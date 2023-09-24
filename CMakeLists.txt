@@ -3,4 +3,5 @@ project(www C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(www TcpServiceThread.c)
+add_executable(www TcpServiceThread.c
+        TcpServiceSelect.c)

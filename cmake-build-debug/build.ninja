@@ -55,6 +55,12 @@ build CMakeFiles/www.dir/TcpServiceThread.c.o: C_COMPILER__www_unscanned_Debug /
   OBJECT_DIR = CMakeFiles/www.dir
   OBJECT_FILE_DIR = CMakeFiles/www.dir
 
+build CMakeFiles/www.dir/TcpServiceSelect.c.o: C_COMPILER__www_unscanned_Debug /home/jishuge/CLionProjects/www/TcpServiceSelect.c || cmake_object_order_depends_target_www
+  DEP_FILE = CMakeFiles/www.dir/TcpServiceSelect.c.o.d
+  FLAGS = -g -std=gnu2x -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/www.dir
+  OBJECT_FILE_DIR = CMakeFiles/www.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target www
@@ -63,7 +69,7 @@ build CMakeFiles/www.dir/TcpServiceThread.c.o: C_COMPILER__www_unscanned_Debug /
 #############################################
 # Link the executable www
 
-build www: C_EXECUTABLE_LINKER__www_Debug CMakeFiles/www.dir/TcpServiceThread.c.o
+build www: C_EXECUTABLE_LINKER__www_Debug CMakeFiles/www.dir/TcpServiceThread.c.o CMakeFiles/www.dir/TcpServiceSelect.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/www.dir
   POST_BUILD = :
